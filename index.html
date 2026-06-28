@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>MegaPocket • Business Suite</title>
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --bg:#0f172a; --surface:#1e293b; --card:#1e293b;
+  --text:#f1f5f9; --text2:#94a3b8; --border:#334155;
+  --primary:#3b82f6; --primary2:#2563eb;
+  --success:#10b981; --warning:#f59e0b; --danger:#ef4444;
+  --radius:12px; --radius2:8px;
+  --shadow:0 4px 6px -1px rgba(0,0,0,0.3);
+}
+.light {
+  --bg:#f8fafc; --surface:#ffffff; --card:#ffffff;
+  --text:#0f172a; --text2:#475569; --border:#e2e8f0;
+  --shadow:0 4px 6px -1px rgba(0,0,0,0.1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:all .3s}
+.app-wrap{max-width:500px;margin:0 auto;padding:16px;padding-bottom:90px}
+header{display:flex;justify-content:space-between;align-items:center;padding:16px 0}
+header h1{font-size:1.4rem;font-weight:800}
+header h1 span{color:var(--primary)}
+header .actions{display:flex;gap:8px}
+header .actions button{background:var(--surface);border:1px solid var(--border);color:var(--text);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:0.9rem;transition:.2s}
+header .actions button:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
+.dashboard{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.stat-card{background:var(--card);padding:16px;border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--border)}
+.stat-card .icon{font-size:1.4rem;margin-bottom:8px}
+.stat-card .value{font-size:1.6rem;font-weight:800;margin-bottom:4px}
+.stat-card .label{font-size:0.7rem;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px}
+.stat-card.pri{border-left:3px solid var(--primary)}
+.stat-card.suc{border-left:3px solid var(--success)}
+.stat-card.war{border-left:3px solid var(--warning)}
+.stat-card.dan{border-left:3px solid var(--danger)}
+nav.tabs{display:flex;gap:4px;background:var(--surface);padding:4px;border-radius:var(--radius);margin-bottom:20px;overflow-x:auto}
+nav.tabs button{flex:1;min-width:60px;padding:10px 8px;border:none;background:transparent;color:var(--text2);border-radius:var(--radius2);cursor:pointer;font-size:0.7rem;font-weight:600;transition:.2s;white-space:nowrap}
+nav.tabs button i{display:block;font-size:1rem;margin-bottom:3px}
+nav.tabs button.active{background:var(--primary);color:#fff}
+.panel{display:none}
+.panel.active{display:block}
+.card{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:12px;border:1px solid var(--border);box-shadow:var(--shadow)}
+.card h3{font-size:0.95rem;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.card h3 i{color:var(--primary)}
+.form-group{margin-bottom:12px}
+.form-group label{display:block;font-size:0.75rem;font-weight:600;margin-bottom:4px;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius2);color:var(--text);font-size:0.9rem;font-family:inherit;transition:.2s}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(59,130,246,0.15)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn{width:100%;padding:12px;border:none;border-radius:var(--radius2);font-weight:700;font-size:0.9rem;cursor:pointer;transition:.2s;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-pri{background:var(--primary);color:#fff}
+.btn-pri:hover{background:var(--primary2)}
+.btn-suc{background:var(--success);color:#fff}
+.btn-out{background:transparent;border:1px solid var(--border);color:var(--text)}
+.btn-dan{background:var(--danger);color:#fff}
+.btn-xs{padding:6px 10px;font-size:0.7rem;width:auto;border-radius:6px}
+.list-item{display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg);border-radius:var(--radius2);margin-bottom:6px;border:1px solid var(--border)}
+.list-item .info{flex:1}
+.list-item .info .name{font-weight:600;font-size:0.9rem}
+.list-item .info .sub{font-size:0.7rem;color:var(--text2);margin-top:2px}
+.list-item .actions{display:flex;gap:6px}
+.badge{display:inline-block;padding:3px 8px;border-radius:20px;font-size:0.65rem;font-weight:700}
+.badge-suc{background:rgba(16,185,129,0.15);color:var(--success)}
+.badge-war{background:rgba(245,158,11,0.15);color:var(--warning)}
+.badge-dan{background:rgba(239,68,68,0.15);color:var(--danger)}
+.badge-pri{background:rgba(59,130,246,0.15);color:var(--primary)}
+.chart-bar{display:flex;align-items:flex-end;gap:8px;height:120px;padding:8px 0}
+.chart-bar .bar{flex:1;background:var(--primary);border-radius:4px 4px 0 0;min-height:4px;position:relative;transition:.3s}
+.chart-bar .bar .val{position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:0.6rem;font-weight:700}
+.empty{text-align:center;padding:40px 20px;color:var(--text2)}
+.empty i{font-size:3rem;margin-bottom:12px;display:block;opacity:0.3}
+.empty p{font-size:0.85rem}
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:100;align-items:center;justify-content:center;padding:16px}
+.modal-overlay.show{display:flex}
+.modal{background:var(--surface);border-radius:var(--radius);padding:20px;width:100%;max-width:400px;max-height:90vh;overflow-y:auto}
+.modal h2{font-size:1.1rem;margin-bottom:16px}
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:var(--success);color:#fff;padding:12px 20px;border-radius:20px;font-weight:600;font-size:0.85rem;z-index:200;animation:slideUp .3s ease;box-shadow:0 10px 30px rgba(0,0,0,0.3)}
+.get-app{position:fixed;bottom:20px;left:16px;right:16px;max-width:468px;margin:0 auto;background:var(--primary);color:#fff;padding:14px;border-radius:var(--radius);text-align:center;font-weight:700;cursor:pointer;display:none;box-shadow:0 10px 30px rgba(59,130,246,0.4);z-index:50;animation:slideUp .5s ease}
+@keyframes slideUp{from{transform:translateY(100px);opacity:0}to{transform:translateY(0);opacity:1}}
+@media print{header,nav.tabs,.get-app,footer{display:none}}
+</style>
+</head>
+<body>
+<div class="app-wrap">
+<header>
+<h1>Mega<span>Pocket</span></h1>
+<div class="actions">
+<button onclick="toggleTheme()" title="Thème"><i class="fas fa-moon"></i></button>
+<button onclick="exportData()" title="Sauvegarder"><i class="fas fa-download"></i></button>
+</div>
+</header>
+
+<div class="dashboard">
+<div class="stat-card pri"><div class="icon">💰</div><div class="value" id="totalRevenue">0 CDF</div><div class="label">Revenus</div></div>
+<div class="stat-card suc"><div class="icon">📦</div><div class="value" id="totalStock">0</div><div class="label">Produits</div></div>
+<div class="stat-card war"><div class="icon">👥</div><div class="value" id="totalClients">0</div><div class="label">Clients</div></div>
+<div class="stat-card dan"><div class="icon">📄</div><div class="value" id="totalInvoices">0</div><div class="label">Factures</div></div>
+</div>
+
+<nav class="tabs" id="tabs">
+<button class="active" onclick="switchTab('invoices')"><i class="fas fa-file-invoice"></i>Factures</button>
+<button onclick="switchTab('clients')"><i class="fas fa-users"></i>Clients</button>
+<button onclick="switchTab('stock')"><i class="fas fa-boxes"></i>Stock</button>
+<button onclick="switchTab('qr')"><i class="fas fa-qrcode"></i>QR</button>
+</nav>
+
+<div id="panel-invoices" class="panel active">
+<div class="card"><h3><i class="fas fa-file-invoice"></i>Nouvelle Facture</h3>
+<div class="form-group"><label>Client</label><select id="invClient"><option value="">Sélectionner...</option></select></div>
+<div class="form-row">
+<div class="form-group"><label>Date</label><input type="date" id="invDate"></div>
+<div class="form-group"><label>Échéance</label><input type="date" id="invDue"></div>
+</div>
+<div class="form-group"><label>Désignation</label><input type="text" id="invDesc" placeholder="Service ou produit..."></div>
+<div class="form-row">
+<div class="form-group"><label>Qté</label><input type="number" id="invQty" value="1" min="1"></div>
+<div class="form-group"><label>Prix Unitaire</label><input type="number" id="invPrice" placeholder="0.00"></div>
+</div>
+<button class="btn btn-pri" onclick="addInvoice()"><i class="fas fa-save"></i>Générer Facture</button>
+</div>
+<div id="invoicesList"><div class="empty"><i class="fas fa-file-invoice"></i><p>Aucune facture</p></div></div>
+</div>
+
+<div id="panel-clients" class="panel">
+<div class="card"><h3><i class="fas fa-user-plus"></i>Nouveau Client</h3>
+<div class="form-group"><label>Nom complet</label><input type="text" id="clientName" placeholder="Nom du client..."></div>
+<div class="form-row">
+<div class="form-group"><label>Téléphone</label><input type="tel" id="clientPhone" placeholder="0899123456"></div>
+<div class="form-group"><label>Email</label><input type="email" id="clientEmail" placeholder="client@email.com"></div>
+</div>
+<div class="form-group"><label>Adresse</label><input type="text" id="clientAddr" placeholder="Adresse..."></div>
+<button class="btn btn-pri" onclick="addClient()"><i class="fas fa-plus"></i>Ajouter Client</button>
+</div>
+<div id="clientsList"><div class="empty"><i class="fas fa-users"></i><p>Aucun client</p></div></div>
+</div>
+
+<div id="panel-stock" class="panel">
+<div class="card"><h3><i class="fas fa-box"></i>Nouveau Produit</h3>
+<div class="form-group"><label>Nom du produit</label><input type="text" id="stockName" placeholder="Nom..."></div>
+<div class="form-row">
+<div class="form-group"><label>Quantité</label><input type="number" id="stockQty" value="1" min="0"></div>
+<div class="form-group"><label>Prix Unitaire</label><input type="number" id="stockPrice" placeholder="0.00"></div>
+</div>
+<div class="form-group"><label>Catégorie</label><select id="stockCat"><option>Électronique</option><option>Alimentaire</option><option>Vêtements</option><option>Matériel Bureau</option><option>Autre</option></select></div>
+<button class="btn btn-pri" onclick="addProduct()"><i class="fas fa-plus"></i>Ajouter Produit</button>
+</div>
+<div id="stockList"><div class="empty"><i class="fas fa-boxes"></i><p>Aucun produit</p></div></div>
+</div>
+
+<div id="panel-qr" class="panel">
+<div class="card" style="text-align:center">
+<h3><i class="fas fa-qrcode"></i>Ma Carte de Visite Digitale</h3>
+<div id="qrCode" style="width:200px;height:200px;margin:16px auto;background:var(--bg);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:0.8rem">Remplissez vos infos</div>
+<div class="form-group"><label>Nom</label><input type="text" id="qrName" placeholder="Votre nom..." oninput="updateQR()"></div>
+<div class="form-group"><label>Téléphone</label><input type="tel" id="qrPhone" placeholder="Votre téléphone..." oninput="updateQR()"></div>
+<div class="form-group"><label>Profession</label><input type="text" id="qrRole" placeholder="Votre métier..." oninput="updateQR()"></div>
+<button class="btn btn-pri" onclick="downloadQR()"><i class="fas fa-download"></i>Télécharger QR Code</button>
+</div>
+</div>
+</div>
+
+<div class="get-app" id="installBtn" onclick="installApp()">
+<i class="fas fa-download"></i> Installer l'application
+</div>
+
+<div class="modal-overlay" id="invoiceModal">
+<div class="modal" id="invoiceContent"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<canvas id="qrCanvas" style="display:none"></canvas>
+
+<script>
+// ==================== DATABASE (IndexedDB) ====================
+const DB_NAME='megapocket'; const DB_VER=2;
+let db;
+function openDB(){return new Promise((r,j)=>{const req=indexedDB.open(DB_NAME,DB_VER);req.onupgradeneeded=e=>{const d=e.target.result;if(!d.objectStoreNames.contains('clients'))d.createObjectStore('clients',{keyPath:'id',autoIncrement:true});if(!d.objectStoreNames.contains('invoices'))d.createObjectStore('invoices',{keyPath:'id',autoIncrement:true});if(!d.objectStoreNames.contains('products'))d.createObjectStore('products',{keyPath:'id',autoIncrement:true})};req.onsuccess=e=>{db=e.target.result;r()};req.onerror=j})}
+function add(store,data){return new Promise((r,j)=>{const t=db.transaction(store,'readwrite');const s=t.objectStore(store);const req=s.add({...data,createdAt:new Date().toISOString()});req.onsuccess=()=>r(req.result);req.onerror=j})}
+function getAll(store){return new Promise((r,j)=>{const t=db.transaction(store,'readonly');const s=t.objectStore(store);const req=s.getAll();req.onsuccess=()=>r(req.result||[]);req.onerror=j})}
+function remove(store,id){return new Promise((r,j)=>{const t=db.transaction(store,'readwrite');const s=t.objectStore(store);const req=s.delete(id);req.onsuccess=()=>r();req.onerror=j})}
+function count(store){return new Promise((r,j)=>{const t=db.transaction(store,'readonly');const req=t.objectStore(store).count();req.onsuccess=()=>r(req.result);req.onerror=j})}
+
+// ==================== UI HELPERS ====================
+function toast(msg,type='suc'){const t=document.createElement('div');t.className='toast';t.style.background=type==='dan'?'var(--danger)':'var(--success)';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2500)}
+function formatMoney(n){return parseInt(n||0).toLocaleString('fr-FR')+' CDF'}
+function switchTab(tab){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById('panel-'+tab).classList.add('active');document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));event.target.classList.add('active')}
+function closeModal(){document.getElementById('invoiceModal').classList.remove('show')}
+function toggleTheme(){document.body.classList.toggle('light');const icon=document.querySelector('.actions button i');icon.className=document.body.classList.contains('light')?'fas fa-sun':'fas fa-moon';localStorage.setItem('mp-theme',document.body.classList.contains('light')?'light':'dark')}
+
+// ==================== CLIENTS ====================
+async function addClient(){const n=document.getElementById('clientName').value.trim();if(!n)return toast('Nom requis','dan');const client={name:n,phone:document.getElementById('clientPhone').value.trim(),email:document.getElementById('clientEmail').value.trim(),address:document.getElementById('clientAddr').value.trim()};await add('clients',client);document.getElementById('clientName').value='';document.getElementById('clientPhone').value='';document.getElementById('clientEmail').value='';document.getElementById('clientAddr').value='';toast('Client ajouté !');refreshAll()}
+async function renderClients(){const list=document.getElementById('clientsList');const clients=await getAll('clients');if(!clients.length){list.innerHTML='<div class="empty"><i class="fas fa-users"></i><p>Aucun client</p></div>';return}list.innerHTML=clients.map(c=>`<div class="list-item"><div class="info"><div class="name">${c.name}</div><div class="sub">📞 ${c.phone||'N/A'} | ✉️ ${c.email||'N/A'}</div></div><div class="actions"><button class="btn btn-dan btn-xs" onclick="deleteClient(${c.id})"><i class="fas fa-trash"></i></button></div></div>`).join('');const select=document.getElementById('invClient');select.innerHTML='<option value="">Sélectionner...</option>'+clients.map(c=>`<option value="${c.name}">${c.name}</option>`).join('')}
+async function deleteClient(id){await remove('clients',id);toast('Client supprimé');refreshAll()}
+
+// ==================== INVOICES ====================
+async function addInvoice(){const client=document.getElementById('invClient').value;if(!client)return toast('Sélectionnez un client','dan');const desc=document.getElementById('invDesc').value.trim();if(!desc)return toast('Désignation requise','dan');const qty=parseInt(document.getElementById('invQty').value)||1;const price=parseFloat(document.getElementById('invPrice').value)||0;if(price<=0)return toast('Prix requis','dan');const invoice={client,desc,qty,price,total:qty*price,date:document.getElementById('invDate').value||new Date().toISOString().split('T')[0],due:document.getElementById('invDue').value};const id=await add('invoices',invoice);document.getElementById('invDesc').value='';document.getElementById('invPrice').value='';showInvoice({...invoice,id});refreshAll()}
+function showInvoice(inv){document.getElementById('invoiceContent').innerHTML=`<div style="text-align:center;margin-bottom:16px"><h2>🧾 FACTURE #${String(inv.id).padStart(4,'0')}</h2><p style="color:var(--text2)">Date: ${inv.date||'N/A'} | Échéance: ${inv.due||'N/A'}</p></div><div class="card"><p><strong>Client:</strong> ${inv.client}</p><p><strong>Désignation:</strong> ${inv.desc}</p><p><strong>Qté:</strong> ${inv.qty} × ${formatMoney(inv.price)}</p><h3 style="text-align:right;margin-top:12px;color:var(--primary)">TOTAL: ${formatMoney(inv.total)}</h3></div><button class="btn btn-pri" onclick="window.print()"><i class="fas fa-print"></i>Imprimer</button><button class="btn btn-out" onclick="closeModal()" style="margin-top:8px">Fermer</button>`;document.getElementById('invoiceModal').classList.add('show')}
+async function renderInvoices(){const list=document.getElementById('invoicesList');const invoices=await getAll('invoices');if(!invoices.length){list.innerHTML='<div class="empty"><i class="fas fa-file-invoice"></i><p>Aucune facture</p></div>';return}list.innerHTML=invoices.reverse().map(inv=>`<div class="list-item"><div class="info"><div class="name">Facture #${String(inv.id).padStart(4,'0')}</div><div class="sub">${inv.client} • ${inv.date||'N/A'} • ${formatMoney(inv.total)}</div></div><div class="actions"><span class="badge ${inv.total>0?'badge-suc':'badge-war'}">${formatMoney(inv.total)}</span><button class="btn btn-pri btn-xs" onclick="showInvoice(${JSON.stringify(inv).replace(/"/g,'&quot;')})"><i class="fas fa-eye"></i></button><button class="btn btn-dan btn-xs" onclick="deleteInvoice(${inv.id})"><i class="fas fa-trash"></i></button></div></div>`).join('')}
+async function deleteInvoice(id){await remove('invoices',id);toast('Facture supprimée');refreshAll()}
+
+// ==================== STOCK ====================
+async function addProduct(){const n=document.getElementById('stockName').value.trim();if(!n)return toast('Nom requis','dan');const product={name:n,qty:parseInt(document.getElementById('stockQty').value)||0,price:parseFloat(document.getElementById('stockPrice').value)||0,category:document.getElementById('stockCat').value};await add('products',product);document.getElementById('stockName').value='';document.getElementById('stockQty').value='1';document.getElementById('stockPrice').value='';toast('Produit ajouté !');refreshAll()}
+async function renderStock(){const list=document.getElementById('stockList');const products=await getAll('products');if(!products.length){list.innerHTML='<div class="empty"><i class="fas fa-boxes"></i><p>Aucun produit</p></div>';return}list.innerHTML=products.map(p=>`<div class="list-item"><div class="info"><div class="name">${p.name}</div><div class="sub">${p.category||'Autre'} • Qté: ${p.qty} • ${formatMoney(p.price)}</div></div><div class="actions"><span class="badge ${p.qty>10?'badge-suc':p.qty>0?'badge-war':'badge-dan'}">${p.qty} en stock</span><button class="btn btn-dan btn-xs" onclick="deleteProduct(${p.id})"><i class="fas fa-trash"></i></button></div></div>`).join('')}
+async function deleteProduct(id){await remove('products',id);toast('Produit supprimé');refreshAll()}
+
+// ==================== QR CODE ====================
+let qrInstance=null;
+function updateQR(){const n=document.getElementById('qrName').value.trim();const p=document.getElementById('qrPhone').value.trim();const r=document.getElementById('qrRole').value.trim();if(!n&&!p&&!r)return;const data=`BEGIN:VCARD\nVERSION:3.0\nFN:${n}\nTEL:${p}\nTITLE:${r}\nEND:VCARD`;const qrDiv=document.getElementById('qrCode');qrDiv.innerHTML='';qrDiv.style.background='transparent';if(typeof QRCode!=='undefined'){if(qrInstance)qrInstance.clear();qrInstance=new QRCode(qrDiv,{text:data,width:200,height:200,colorDark:'#0f172a',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M})}else{qrDiv.textContent='Chargement QR...';setTimeout(updateQR,500)}}
+function downloadQR(){const qrDiv=document.getElementById('qrCode');const img=qrDiv.querySelector('img');const canvas=qrDiv.querySelector('canvas');if(img){const link=document.createElement('a');link.download='megapocket-qrcode.png';link.href=img.src;link.click();toast('QR Code téléchargé !')}else if(canvas){const link=document.createElement('a');link.download='megapocket-qrcode.png';link.href=canvas.toDataURL();link.click();toast('QR Code téléchargé !')}else{toast('Générez d\'abord le QR code','dan')}}
+
+// ==================== DASHBOARD ====================
+async function refreshDashboard(){const invoices=await getAll('invoices');const products=await getAll('products');const clients=await getAll('clients');const rev=invoices.reduce((s,i)=>s+(i.total||0),0);document.getElementById('totalRevenue').textContent=formatMoney(rev);document.getElementById('totalStock').textContent=products.length;document.getElementById('totalClients').textContent=clients.length;document.getElementById('totalInvoices').textContent=invoices.length}
+
+// ==================== EXPORT / IMPORT ====================
+async function exportData(){const data={clients:await getAll('clients'),invoices:await getAll('invoices'),products:await getAll('products'),exportedAt:new Date().toISOString()};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`megapocket-${new Date().toISOString().split('T')[0]}.json`;a.click();URL.revokeObjectURL(url);toast('Données exportées !')}
+function importData(){const input=document.createElement('input');input.type='file';input.accept='.json';input.onchange=async e=>{const file=e.target.files[0];const text=await file.text();const data=JSON.parse(text);const t=db.transaction(['clients','invoices','products'],'readwrite');for(const c of data.clients||[])t.objectStore('clients').add(c);for(const i of data.invoices||[])t.objectStore('invoices').add(i);for(const p of data.products||[])t.objectStore('products').add(p);t.oncomplete=()=>{toast('Données importées !');refreshAll()}};input.click()}
+
+// ==================== REFRESH ALL ====================
+async function refreshAll(){await Promise.all([renderClients(),renderInvoices(),renderStock(),refreshDashboard(),loadQR()])}
+function loadQR(){const n=localStorage.getItem('mp-qr-name');const p=localStorage.getItem('mp-qr-phone');const r=localStorage.getItem('mp-qr-role');if(n)document.getElementById('qrName').value=n;if(p)document.getElementById('qrPhone').value=p;if(r)document.getElementById('qrRole').value=r;if(n||p||r)updateQR()}
+
+// Save QR info
+['qrName','qrPhone','qrRole'].forEach(id=>{document.getElementById(id).addEventListener('input',function(){localStorage.setItem('mp-'+id.replace('qr','qr-'),this.value)})})
+
+// ==================== PWA INSTALL ====================
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;document.getElementById('installBtn').style.display='block'})
+function installApp(){if(!deferredPrompt)return toast('Déjà installée ou non supportée','war');deferredPrompt.prompt();deferredPrompt.userChoice.then(()=>{deferredPrompt=null;document.getElementById('installBtn').style.display='none'})}
+
+// ==================== INIT ====================
+(async function init(){
+await openDB();
+document.getElementById('invDate').value=new Date().toISOString().split('T')[0];
+const d=new Date();d.setDate(d.getDate()+30);
+document.getElementById('invDue').value=d.toISOString().split('T')[0];
+if(localStorage.getItem('mp-theme')==='light'){document.body.classList.add('light');document.querySelector('.actions button i').className='fas fa-sun'}
+await refreshAll();
+
+// Set demo data on first run
+const hasData=await count('clients')+await count('invoices')+await count('products');
+if(hasData===0){
+await add('clients',{name:'Jean KABILA',phone:'0899122057',email:'jean@email.com',address:'Kinshasa/Gombe'});
+await add('clients',{name:'Marie MUTOMBO',phone:'0999107184',email:'marie@email.com',address:'Lubumbashi'});
+await add('clients',{name:'Pierre LUMUMBA',phone:'0975630269',email:'pierre@email.com',address:'Kisangani'});
+await add('products',{name:'Ordinateur Dell',qty:15,price:450,category:'Électronique'});
+await add('products',{name:'Rame de papier A4',qty:200,price:8.5,category:'Matériel Bureau'});
+await add('products',{name:'Chaise bureau',qty:25,price:85,category:'Matériel Bureau'});
+await add('products',{name:'Imprimante HP',qty:5,price:320,category:'Électronique'});
+await add('products',{name:'Stylo BIC (boîte)',qty:500,price:2.5,category:'Matériel Bureau'});
+await add('products',{name:'Tablette Samsung',qty:8,price:280,category:'Électronique'});
+await add('invoices',{client:'Jean KABILA',desc:'Maintenance informatique',qty:1,price:150,total:150,date:'2026-06-15',due:'2026-07-15'});
+await add('invoices',{client:'Marie MUTOMBO',desc:'Fournitures de bureau',qty:1,price:250,total:250,date:'2026-06-20',due:'2026-07-20'});
+await add('invoices',{client:'Pierre LUMUMBA',desc:'Formation Excel avancé',qty:2,price:100,total:200,date:'2026-06-25',due:'2026-07-25'});
+await add('invoices',{client:'Jean KABILA',desc:'Installation réseau WiFi',qty:1,price:500,total:500,date:'2026-06-28',due:'2026-07-28'});
+await refreshAll();
+}
+})();
+
+// Close modal on overlay click
+document.getElementById('invoiceModal').addEventListener('click',function(e){if(e.target===this)closeModal()});
+
+// Service Worker
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js')}
+</script>
+</body>
+</html>
